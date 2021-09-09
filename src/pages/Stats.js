@@ -1,12 +1,13 @@
 import React from 'react';
-import Chart from '../components/stats/PureComponent';
+import { Navbar } from '../components/shared/Navbar';
+import Chart from '../components/stats/Chart';
 
 const Stats = () => {
     return (
-        <div>
+        <>
+            <Navbar />
             <Chart />
-            <h1>hello it's working</h1>
-        </div>
+        </>
     )
 }
 

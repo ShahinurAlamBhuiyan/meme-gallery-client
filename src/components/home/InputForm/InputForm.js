@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import './Header.css';
+import './InputForm.css';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
-export const Header = ({ uploadMeme }) => {
+export const InputForm = ({ uploadMeme }) => {
     const [imageLink, setImageLink] = useState()
     const [memeInfo, setMemeInfo] = useState({
         uploadedDate: new Date(),
@@ -19,7 +18,8 @@ export const Header = ({ uploadMeme }) => {
             axios.post('https://api.imgbb.com/1/upload',
                 imageData)
                 .then(function (response) {
-                    setMemeInfo({ ...memeInfo, imageUrl: response.data.data.display_url })
+                    // setMemeInfo({ ...memeInfo, imageUrl: response.data.data.display_url })
+                    setImageLink(response.data.data.display_url)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -40,33 +40,30 @@ export const Header = ({ uploadMeme }) => {
 
     // Submit to the state
     const handleSubmit = (e) => {
-        setMemeInfo({ ...memeInfo, imageUrl: imageLink })
+        if (imageLink) {
+            setMemeInfo({ ...memeInfo, imageUrl: imageLink })
+        }
         e.preventDefault();
     }
 
+    // upload image data to the db
     useEffect(() => {
         if (memeInfo.imageUrl) {
             uploadMeme(memeInfo);
-            setMemeInfo({});
+            setImageLink(null)
+            setMemeInfo({})
         }
     }, [memeInfo.imageUrl])
 
-    console.log(memeInfo);
+
     return (
-        <>
-            <h1 style={{ textAlign: 'center' }}>Meme Gallery</h1>
-            <div className="navContainer">
-               <Link to="/"> <button>Home</button></Link>
-               <Link to="/stats"> <button>stats</button></Link>
-                
+        <form onSubmit={handleSubmit}>
+            <div className="inputContainer">
+                <input onChange={handleUserLink} type="text" name="imageUrl" />
+                <p>or</p>
+                <input type="file" onChange={handleImageUpload} className="custom-file-input" />
             </div>
-            <div className="image-form-container">
-                <form onSubmit={handleSubmit}>
-                    <input onChange={handleUserLink} type="text" name="imageUrl" />
-                    <button type="submit">Submit</button>
-                </form>
-                <input type="file" onChange={handleImageUpload} id="add-meme" />
-            </div>
-        </>
+            <button className="submitBtn" type="submit" disabled={!imageLink && "true"} >Submit</button>
+        </form>
     )
 }
