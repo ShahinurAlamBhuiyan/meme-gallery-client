@@ -28,7 +28,7 @@ export default function Chart() {
 
   // get last 7 days data from api...
   const getMemes = () => {
-    axios.get('http://localhost:5000/recentMemes')
+    axios.get('https://frozen-scrubland-68019.herokuapp.com/recentMemes')
       .then(function (response) {
         setMemesInfo(response.data);
       })
@@ -90,7 +90,7 @@ export default function Chart() {
     <div className="chartContainer">
       <h2>Memes uploaded per day</h2>
       <p>Last 7 days record</p>
-      
+
       <BarChart
         width={700}
         height={300}
@@ -109,7 +109,7 @@ export default function Chart() {
         <Legend verticalAlign="top" height={36} />
         <Bar dataKey="imageUpload" fill="#8884d8" />
       </BarChart>
-      
+
     </div>
   );
 }
